@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/tryconnectwifi"
+        android:title="Try Connect Wifi">
+    </item>
+        <item
+        android:id="@+id/copyfullwifi"
+        android:title="Copy Wifi Data">
+    </item>
+    <item
+        android:id="@+id/copyPass"
+        android:title="Copy Password">
+    </item>
+
+</menu>
