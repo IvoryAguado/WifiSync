@@ -3,14 +3,17 @@
     tools:context="com.smorenburgds.wifisync.MainActivity" >
 
     <item
+        android:id="@+id/action_sync"
+        android:showAsAction="ifRoom"
+        android:title="@+string/sync"/>
+    <item
+        android:id="@+id/action_clear_all"
+        android:showAsAction="ifRoom"
+        android:title="@+string/action_clear_all"/>
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
-    <item
-        android:id="@+id/action_sync"
-        android:showAsAction="ifRoom"
-        android:title="@+string/sync">
-    </item>
 
 </menu>
