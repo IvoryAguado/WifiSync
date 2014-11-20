@@ -22,8 +22,7 @@ import com.smorenburgds.wifisync.utils.WifiBackupAgent;
 public class MainActivity extends Activity {
 
 	private static final String FILE_WIFI_SUPPLICANT = "/data/misc/wifi/wpa_supplicant.conf";
-	// private static final String FILE_WIFI_SUPPLICANT_TEMPLATE =
-	// "/system/etc/wifi/wpa_supplicant.conf";
+	private static final String FILE_WIFI_SUPPLICANT_TEMPLATE = "/system/etc/wifi/wpa_supplicant.conf";
 	private static final String FILE_WIFI_SUPPLICANT_TEMP = "/storage/ext_sd/wpa_supplicant.conf";
 
 	private ListView wifiListView;
@@ -42,14 +41,8 @@ public class MainActivity extends Activity {
 		daoGenStart();
 		wifiListView = (ListView) this.findViewById(R.id.listWifiView);
 
-		andT.commandExecutor(andT.new Command("cp " + FILE_WIFI_SUPPLICANT
-				+ " /storage/ext_sd/"));
-
 		registerForContextMenu(wifiListView);
-
-		wifiBA.parseWpa_supplicantFile(andT
-				.convertStreamToString(FILE_WIFI_SUPPLICANT_TEMP));
-
+		syncWifis();
 		// wifiListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 	}
@@ -67,13 +60,21 @@ public class MainActivity extends Activity {
 		daoMaster = new DaoMaster(db);
 		daoSession = daoMaster.newSession();
 		wifidao = daoSession.getWifiDao();
+
+	}
+
+	private void readFromPhoneWifis() {
+		andT.commandExecutor(andT.new Command("cp " + FILE_WIFI_SUPPLICANT
+				+ " /storage/ext_sd/"));
+		syncWifis();
 	}
 
 	private void syncWifis() {
-		wifidao.insert(new Wifi(null, "SmorenburgS", ("1234"), "raw"));
-		wifidao.insert(new Wifi(null, "SmorenburgS2", ("1234"), "raw"));
-		wifidao.insert(new Wifi(null, "SmorenburgS3", ("1234"), "raw"));
-		wifidao.insert(new Wifi(null, "SmorenburgS4", ("1234"), "raw"));
+		wifidao.deleteAll();
+		for (Wifi s : wifiBA.parseWpa_supplicantFile(andT
+				.convertStreamToString(FILE_WIFI_SUPPLICANT_TEMP))) {
+			wifidao.insert(s);
+		}
 		populateWifiListView();
 	}
 
@@ -87,10 +88,12 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
+	
 		int id = item.getItemId();
 		if (id == R.id.tryconnectwifi) {
 			return true;
 		} else if (id == R.id.copyfullwifi) {
+			
 			return true;
 		} else if (id == R.id.copyPass) {
 			return true;
@@ -100,8 +103,6 @@ public class MainActivity extends Activity {
 
 	@Override
 	public void onContextMenuClosed(Menu menu) {
-
-		populateWifiListView();
 		super.onContextMenuClosed(menu);
 	}
 
@@ -122,11 +123,13 @@ public class MainActivity extends Activity {
 			return true;
 		} else if (id == R.id.action_clear_all) {
 			wifidao.deleteAll();
+			populateWifiListView();
 			return true;
 		} else if (id == R.id.action_sync) {
-			syncWifis();
+			 readFromPhoneWifis();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 }
