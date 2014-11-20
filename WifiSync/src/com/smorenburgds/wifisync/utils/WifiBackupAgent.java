@@ -3,11 +3,12 @@ package com.smorenburgds.wifisync.utils;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.smorenburgds.wifisync.dao.Wifi;
-
+import android.os.AsyncTask;
 import android.util.Log;
 
-public class WifiBackupAgent {
+import com.smorenburgds.wifisync.dao.Wifi;
+
+public class WifiBackupAgent extends AsyncTask<String, Integer, Long> {
 
 	public WifiBackupAgent() {
 		// TODO Auto-generated constructor stub
@@ -17,7 +18,8 @@ public class WifiBackupAgent {
 
 		// Log.i(getClass().getName(), fileContent);
 
-		String[] splitedNetworks = fileContent.split("\n"), splitedNetworksRaw = fileContent.split("\n");
+		String[] splitedNetworks = fileContent.split("\n"), splitedNetworksRaw = fileContent
+				.split("\n");
 
 		List<Wifi> wifilist = new LinkedList<Wifi>();
 		// string.replaceAll("psk=", "").replaceAll("[\"]"
@@ -25,8 +27,8 @@ public class WifiBackupAgent {
 		String actualPassword = "";
 		String actualSSID = "";
 
-		int i=0;
-		
+		int i = 0;
+
 		for (String string : splitedNetworks) {
 
 			if (string.contains("ssid=")) {
@@ -41,7 +43,8 @@ public class WifiBackupAgent {
 
 			}
 			if (!actualSSID.isEmpty() && !actualPassword.isEmpty()) {
-				wifilist.add(new Wifi(null, actualSSID, actualPassword, splitedNetworksRaw[i]));
+				wifilist.add(new Wifi(null, actualSSID, actualPassword,
+						splitedNetworksRaw[i]));
 				i++;
 				actualPassword = "";
 				actualSSID = "";
@@ -53,6 +56,12 @@ public class WifiBackupAgent {
 		}
 
 		return wifilist;
+	}
+
+	@Override
+	protected Long doInBackground(String... params) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

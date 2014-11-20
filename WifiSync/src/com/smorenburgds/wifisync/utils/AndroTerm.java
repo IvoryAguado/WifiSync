@@ -18,10 +18,10 @@ public class AndroTerm {
 	private Process process;
 
 	private ExecutorService executorCacheThreadPool = Executors
-			.newCachedThreadPool();
+			.newFixedThreadPool(5);
 
 	public AndroTerm(boolean asRoot) {
-		this.setAsRoot(asRoot);
+		setAsRoot(asRoot);
 	}
 
 	public class Command {
@@ -39,7 +39,7 @@ public class AndroTerm {
 			this.commandString = commandString;
 		}
 	}
-	
+
 	public String convertStreamToString(final String filePath) {
 
 		FutureTask<String> theTask = new FutureTask<String>(
@@ -66,12 +66,8 @@ public class AndroTerm {
 					}
 				});
 		try {
-			if (asRoot) 
-				process = Runtime.getRuntime().exec("su");
 			executorCacheThreadPool.execute(theTask);
 			return theTask.get();
-		} catch (IOException e) {
-			return "File read failed!";
 		} catch (InterruptedException e) {
 			return "File read failed!";
 		} catch (ExecutionException e) {
@@ -81,43 +77,36 @@ public class AndroTerm {
 
 	public void commandExecutor(Command command) {
 
-		try {
-			// Perform su to get root privileges
-			if (asRoot) {
+		// Perform su to get root privileges
+		if (asRoot)
+			try {
 				process = Runtime.getRuntime().exec("su");
+			} catch (IOException e) {
 			}
+		// To write in Terminal
+		final DataOutputStream os = new DataOutputStream(
+				process.getOutputStream());
 
-			// To write in Terminal
-			final DataOutputStream os = new DataOutputStream(
-					process.getOutputStream());
+		// To final so I can use it
+		final String fCommand = command.getCommandString().trim();
 
-			// To final so I can use it
-			final String fCommand = command.getCommandString().trim();
-			Runnable run = new Runnable() {
+		executorCacheThreadPool.execute(new Runnable() {
 
-				@Override
-				public void run() {
-					try {
-						os.writeBytes(fCommand + "\n");
-						//os.writeBytes("exit\n");
-						os.flush();
-						os.close();
-					} catch (IOException e) {
-					}
+			@Override
+			public void run() {
+				try {
+					os.writeBytes(fCommand + "\n");
+					os.writeBytes("exit\n");
+					os.flush();
+					os.close();
+				} catch (IOException e) {
 				}
-			};
-				executorCacheThreadPool.execute(run);
-		} catch (IOException e) {
-
-		}
-	}
-
-	public boolean isAsRoot() {
-		return asRoot;
+			}
+		});
+		// executorCacheThreadPool.shutdown();
 	}
 
 	public void setAsRoot(boolean asRoot) {
 		this.asRoot = asRoot;
 	}
-
 }

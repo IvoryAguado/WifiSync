@@ -3,7 +3,6 @@ package com.smorenburgds.wifisync.misc;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
