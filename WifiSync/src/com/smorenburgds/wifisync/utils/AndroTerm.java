@@ -3,13 +3,9 @@ package com.smorenburgds.wifisync.utils;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
 
 public class AndroTerm {
 
@@ -17,8 +13,6 @@ public class AndroTerm {
 
 	private Process process;
 
-	private ExecutorService executorCacheThreadPool = Executors
-			.newFixedThreadPool(5);
 
 	public AndroTerm(boolean asRoot) {
 		setAsRoot(asRoot);
@@ -42,37 +36,32 @@ public class AndroTerm {
 
 	public String convertStreamToString(final String filePath) {
 
-		FutureTask<String> theTask = new FutureTask<String>(
-				new Callable<String>() {
-					@Override
-					public String call() throws Exception {
-						StringBuffer buf = new StringBuffer();
-						BufferedReader reader = null;
-						String str = "";
-						reader = new BufferedReader(new InputStreamReader(
-								new FileInputStream(filePath)));
-						if (reader != null) {
-							while ((str = reader.readLine()) != null) {
-								buf.append(str + "\n");
-							}
-						}
-						if (reader != null) {
-							try {
-								reader.close();
-							} catch (IOException e) {
-							}
-						}
-						return buf.toString();
-					}
-				});
+		StringBuffer buf = new StringBuffer();
+		BufferedReader reader = null;
+		String str = "";
 		try {
-			executorCacheThreadPool.execute(theTask);
-			return theTask.get();
-		} catch (InterruptedException e) {
-			return "File read failed!";
-		} catch (ExecutionException e) {
-			return "File read failed!";
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(
+					filePath)));
+		
+		if (reader != null) {
+			while ((str = reader.readLine()) != null) {
+				buf.append(str + "\n");
+			}
 		}
+		if (reader != null) {
+			try {
+				reader.close();
+			} catch (IOException e) {
+			}
+		}} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return buf.toString();
+
 	}
 
 	public void commandExecutor(Command command) {
@@ -90,20 +79,14 @@ public class AndroTerm {
 		// To final so I can use it
 		final String fCommand = command.getCommandString().trim();
 
-		executorCacheThreadPool.execute(new Runnable() {
+		try {
+			os.writeBytes(fCommand + "\n");
+			os.writeBytes("exit\n");
+			os.flush();
+			os.close();
+		} catch (IOException e) {
+		}
 
-			@Override
-			public void run() {
-				try {
-					os.writeBytes(fCommand + "\n");
-					os.writeBytes("exit\n");
-					os.flush();
-					os.close();
-				} catch (IOException e) {
-				}
-			}
-		});
-		// executorCacheThreadPool.shutdown();
 	}
 
 	public void setAsRoot(boolean asRoot) {

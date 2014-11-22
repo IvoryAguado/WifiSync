@@ -1,5 +1,7 @@
 package com.smorenburgds.wifisync.misc;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.app.Activity;
@@ -22,6 +24,13 @@ public class WifiAdapter extends ArrayAdapter<Wifi> {
 	public WifiAdapter(Activity context, int layout, List<Wifi> wifiList) {
 		super(context, layout, wifiList);
 		this.layout = layout;
+		Collections.sort(wifiList, new Comparator<Wifi>() {
+
+			@Override
+			public int compare(Wifi lhs, Wifi rhs) {
+				return lhs.getName().compareTo(rhs.getName());
+			}
+		});
 		this.wifiList = wifiList;
 		this.context = context;
 	}

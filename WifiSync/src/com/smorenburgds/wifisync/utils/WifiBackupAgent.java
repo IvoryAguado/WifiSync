@@ -3,12 +3,11 @@ package com.smorenburgds.wifisync.utils;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.smorenburgds.wifisync.dao.Wifi;
 
-public class WifiBackupAgent extends AsyncTask<String, Integer, Long> {
+public class WifiBackupAgent {
 
 	public WifiBackupAgent() {
 		// TODO Auto-generated constructor stub
@@ -19,7 +18,7 @@ public class WifiBackupAgent extends AsyncTask<String, Integer, Long> {
 		// Log.i(getClass().getName(), fileContent);
 
 		String[] splitedNetworks = fileContent.split("\n"), splitedNetworksRaw = fileContent
-				.split("\n");
+				.split("\nnetwork=.");
 
 		List<Wifi> wifilist = new LinkedList<Wifi>();
 		// string.replaceAll("psk=", "").replaceAll("[\"]"
@@ -44,7 +43,7 @@ public class WifiBackupAgent extends AsyncTask<String, Integer, Long> {
 			}
 			if (!actualSSID.isEmpty() && !actualPassword.isEmpty()) {
 				wifilist.add(new Wifi(null, actualSSID, actualPassword,
-						splitedNetworksRaw[i]));
+						splitedNetworksRaw[i+1].replace('}',' ')));
 				i++;
 				actualPassword = "";
 				actualSSID = "";
@@ -56,12 +55,6 @@ public class WifiBackupAgent extends AsyncTask<String, Integer, Long> {
 		}
 
 		return wifilist;
-	}
-
-	@Override
-	protected Long doInBackground(String... params) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
