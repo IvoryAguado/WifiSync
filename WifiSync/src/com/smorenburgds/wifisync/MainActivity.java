@@ -115,8 +115,8 @@ public class MainActivity extends Activity {
 			return true;
 		} else if (id == R.id.action_clear_all) {
 			new AlertDialog.Builder(this)
-					.setTitle("Delete All Entrys")
-					.setMessage("Are you sure you want to delete all entrys?")
+					.setTitle("Borrar todos los WiFis")
+					.setMessage("Estas segur@ de que quieres borrar todo?")
 					.setPositiveButton(android.R.string.yes,
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,

@@ -6,60 +6,55 @@ package com.smorenburgds.wifisync.dao;
  */
 public class Wifi {
 
-	private Long id;
-	private String name;
-	private String password;
-	private String rawData;
+    private Long id;
+    private String name;
+    private String password;
+    private String rawData;
 
-	public Wifi() {
-	}
+    public Wifi() {
+    }
 
-	public Wifi(Long id) {
-		this.id = id;
-	}
+    public Wifi(Long id) {
+        this.id = id;
+    }
 
-	public Wifi(Long id, String name, String password, String rawData) {
-		this.id = id;
-		this.name = name;
-		this.password = password;
-		this.rawData = rawData;
-	}
+    public Wifi(Long id, String name, String password, String rawData) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.rawData = rawData;
+    }
 
-	@Override
-	public String toString() {
-		return this.getName();
-	}
-	
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getRawData() {
-		return rawData;
-	}
+    public String getRawData() {
+        return rawData;
+    }
 
-	public void setRawData(String rawData) {
-		this.rawData = rawData;
-	}
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
 
 }

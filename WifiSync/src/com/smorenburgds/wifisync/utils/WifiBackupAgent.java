@@ -13,6 +13,8 @@ import com.smorenburgds.wifisync.WifiSyncApplication;
 import com.smorenburgds.wifisync.dao.Wifi;
 
 public class WifiBackupAgent {
+	private final static String WIFI_BLOCK_START = "network={";
+	private final static String WIFI_BLOCK_END = "}";
 
 	public WifiBackupAgent() {
 		// TODO Auto-generated constructor stub
@@ -22,8 +24,8 @@ public class WifiBackupAgent {
 
 		// Log.i(getClass().getName(), fileContent);
 
-		String[] splitedNetworks = fileContent.split("\n"), splitedNetworksRaw = fileContent
-				.split("\nnetwork=");
+		String[] splitedNetworks = fileContent.split("\n\n"), splitedNetworksRaw = fileContent
+				.split("network=");
 
 		List<Wifi> wifilist = new LinkedList<Wifi>();
 		// string.replaceAll("psk=", "").replaceAll("[\"]"
@@ -32,33 +34,82 @@ public class WifiBackupAgent {
 		String actualSSID = "";
 		Log.i("OLE", Arrays.toString(splitedNetworksRaw));
 
-		int i = 1;
+		for (int i = 0; i < splitedNetworks.length; i++) {
+			String block = splitedNetworks[i].trim();
 
-		for (String string : splitedNetworks) {
+			if (block.startsWith(WIFI_BLOCK_START)
+					&& block.endsWith(WIFI_BLOCK_END)) {
 
-			if (string.contains("ssid=")) {
-				actualSSID = string.replaceAll("ssid=", "")
-						.replaceAll("\"", "").trim();
-				// Log.i(getClass().getName(), actualSSID);
-			}
-			if (string.contains("psk=")) {
-				actualPassword = string.replaceAll("psk=", "")
-						.replaceAll("\"", "").trim();
-				// Log.i(getClass().getName(), actualPassword);
-
-			} else if (string.contains("key_mgmt=NONE")) {
-				actualPassword = "Open WiFi Network";
-			}
-			if (string.contains("key_mgmt=WPA-EAP")) {
-				actualPassword = "Radius Auth";
-			}
-			if (!actualSSID.isEmpty() && !actualPassword.isEmpty()) {
-				wifilist.add(new Wifi(null, actualSSID, actualPassword,
-						splitedNetworksRaw[i]));
-				i++;
-				actualPassword = "";
 				actualSSID = "";
+
+				String blockLines[] = block.split("\n");
+
+				for (int j = 0; j < blockLines.length; j++) {
+					String line = blockLines[j].trim();
+
+					if (line.startsWith("ssid=")) {
+						actualSSID = line.replace("ssid=", "").replaceAll("\"",
+								"");
+						// Network Keys:
+					} else if (line.startsWith("psk=")) {
+						// passKeys.put("psk", line.replace("psk=", ""));
+						actualPassword = line.replace("psk=", "").replaceAll(
+								"\"", "");
+						// type = NetInfo.TYPE_WPA;
+					} else if (line.startsWith("wep_key0=")) {
+						// passKeys.put("WEP Key 0", line.replace("wep_key0=",
+						// ""));
+						actualPassword = line.replace("psk=", "").replaceAll(
+								"\"", "");
+						// type = NetInfo.TYPE_WEP;
+					} else if (line.startsWith("wep_key1=")) {
+						// passKeys.put("WEP Key 1", line.replace("wep_key1=",
+						// ""));
+					} else if (line.startsWith("wep_key2=")) {
+						// passKeys.put("WEP Key 2", line.replace("wep_key2=",
+						// ""));
+					} else if (line.startsWith("wep_key3=")) {
+						// passKeys.put("WEP Key 3", line.replace("wep_key3=",
+						// ""));
+					} else if (!block.contains("psk=")) {
+						// passKeys.put("Password", line.replace("password=",
+						// ""));
+						actualPassword = "Wifi Open";
+
+					} else if (line.startsWith("password=")) {
+						// passKeys.put("Password", line.replace("password=",
+						// ""));
+						actualPassword = line.replace("psk=", "").replaceAll(
+								"\"", "");
+
+					} else if (actualSSID != "") {
+						wifilist.add(new Wifi(null, actualSSID, actualPassword,
+								block.replaceAll("network=", "")));
+					}
+
+				}
 			}
+
+			// if (string.contains("ssid=")) {
+			// actualSSID = string.replaceAll("ssid=", "")
+			// .replaceAll("\"", "").trim();
+			// // Log.i(getClass().getName(), actualSSID);
+			// }
+			// if (string.contains("key_mgmt=NONE")) {
+			// if (string.contains("psk=")) {
+			// actualPassword = string.replaceAll("psk=", "")
+			// .replaceAll("\"", "").trim();
+			// } else {
+			// actualPassword = "Open WiFi Network";
+			// }
+			// }
+			// if (string.contains("psk=")) {
+			// actualPassword = string.replaceAll("psk=", "")
+			// .replaceAll("\"", "").trim();
+			// } else if (string.contains("key_mgmt=WPA-EAP")) {
+			// actualPassword = "Radius Auth";
+			// }
+
 			// if (wifiToAdd.getPassword().isEmpty()) {
 			// wifilist.add(wifiToAdd);
 			// }
@@ -67,6 +118,4 @@ public class WifiBackupAgent {
 
 		return wifilist;
 	}
-
-	
 }
