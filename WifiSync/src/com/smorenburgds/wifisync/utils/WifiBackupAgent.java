@@ -4,8 +4,12 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.content.Context;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 
+import com.smorenburgds.wifisync.WifiSyncApplication;
 import com.smorenburgds.wifisync.dao.Wifi;
 
 public class WifiBackupAgent {
@@ -42,10 +46,11 @@ public class WifiBackupAgent {
 						.replaceAll("\"", "").trim();
 				// Log.i(getClass().getName(), actualPassword);
 
-			}else if (string.contains("key_mgmt=NONE")) {
-				actualPassword="key_mgmt=NONE";
-			}if (string.contains("key_mgmt=WPA-EAP")) {
-				actualPassword="key_mgmt=WPA-EAP";
+			} else if (string.contains("key_mgmt=NONE")) {
+				actualPassword = "Open WiFi Network";
+			}
+			if (string.contains("key_mgmt=WPA-EAP")) {
+				actualPassword = "Radius Auth";
 			}
 			if (!actualSSID.isEmpty() && !actualPassword.isEmpty()) {
 				wifilist.add(new Wifi(null, actualSSID, actualPassword,
@@ -63,4 +68,5 @@ public class WifiBackupAgent {
 		return wifilist;
 	}
 
+	
 }

@@ -6,8 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -72,7 +76,7 @@ public class Functions {
 
 		andT.commandExecutor(andT.new Command("sleep 5 && rm  "
 				+ DIR_WIFISYNC_TEMP + "wpa_supplicant.conf"));
-//		Log.i("LOGREADWPA", listFromFile.toString());
+		// Log.i("LOGREADWPA", listFromFile.toString());
 		return listFromFile;
 	}
 
@@ -134,11 +138,11 @@ public class Functions {
 			wifidao.deleteAll();
 			Iterator<Entry<String, Wifi>> newSyncedListIterable = newSyncedList
 					.entrySet().iterator();
-			
+
 			while (newSyncedListIterable.hasNext()) {
 				wifidao.insert(newSyncedListIterable.next().getValue());
 			}
-			
+
 			daoDb.removeAll(parseDb);
 			setAllToParse(daoDb);
 			return wifidao.loadAll();
@@ -158,12 +162,12 @@ public class Functions {
 		protected Void doInBackground(Void... params) {
 
 			HashMap<String, Wifi> newSyncedList = new HashMap<String, Wifi>();
-		
+
 			for (Wifi wifi : wifidao.loadAll()) {
-				newSyncedList.put(wifi.getName(),wifi);
+				newSyncedList.put(wifi.getName(), wifi);
 			}
 			for (Wifi wifi : readFromPhoneWifis()) {
-				newSyncedList.put(wifi.getName(),wifi);
+				newSyncedList.put(wifi.getName(), wifi);
 			}
 			Iterator<Entry<String, Wifi>> newSyncedListIterable = newSyncedList
 					.entrySet().iterator();
@@ -179,6 +183,62 @@ public class Functions {
 			populateWifiListView();
 			super.onPostExecute(result);
 		}
+	}
+
+	public class tryToConnectToThisWiFi extends AsyncTask<Wifi, Void, Void> {
+		public void tryToConnect(Wifi wifi) {
+
+			String networkSSID = wifi.getName();
+			String networkPass = wifi.getPassword();
+
+			WifiConfiguration conf = new WifiConfiguration();
+			conf.SSID = "\"" + networkSSID + "\"";
+
+			// conf.wepKeys[0] = "\"" + networkPass + "\"";
+			// conf.wepTxKeyIndex = 0;
+			// conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+			// conf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+
+			conf.preSharedKey = "\"" + networkPass + "\"";
+
+			conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+
+			WifiManager wifiManager = (WifiManager) WifiSyncApplication
+					.getAppContext().getSystemService(Context.WIFI_SERVICE);
+			wifiManager.addNetwork(conf);
+
+			List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
+			for (WifiConfiguration i : list) {
+				if (i.SSID != null && i.SSID.equals("\"" + networkSSID + "\"")) {
+					wifiManager.disconnect();
+					wifiManager.enableNetwork(i.networkId, true);
+					wifiManager.reconnect();
+					break;
+				}
+			}
+			// UPD: In case of WEP, if your password is in hex, you do not need
+			// to
+			// surround it with quotes.
+
+		}
+
+		@Override
+		protected void onPreExecute() {
+			Toast.makeText(WifiSyncApplication.getAppContext(),
+					"Trying to connect...", Toast.LENGTH_LONG).show();
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Void doInBackground(Wifi... params) {
+
+			for (Wifi wifi : params) {
+				tryToConnect(wifi);
+			}
+
+			return null;
+		}
+		
 	}
 
 	public WifiDao getWifidao() {

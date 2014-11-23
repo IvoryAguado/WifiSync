@@ -22,13 +22,13 @@ public class WifiAdapter extends ArrayAdapter<Wifi> {
 
 	public WifiAdapter(Activity context, List<Wifi> wifiList) {
 		super(context,R.layout.list_wifi_item, wifiList);
-		Collections.sort(wifiList, new Comparator<Wifi>() {
-
-			@Override
-			public int compare(Wifi lhs, Wifi rhs) {
-				return lhs.getName().compareTo(rhs.getName());
-			}
-		});
+//		Collections.sort(wifiList, new Comparator<Wifi>() {
+//
+//			@Override
+//			public int compare(Wifi lhs, Wifi rhs) {
+//				return lhs.getName().compareTo(rhs.getName());
+//			}
+//		});
 		this.wifiList = wifiList;
 		this.context = context;
 	}

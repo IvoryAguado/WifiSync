@@ -25,8 +25,6 @@ import com.smorenburgds.wifisync.threads.Functions;
 
 public class MainActivity extends Activity {
 
-	
-
 	public static ListView wifiListView;
 	public static MainActivity activitymain;
 
@@ -72,7 +70,8 @@ public class MainActivity extends Activity {
 
 		int id = item.getItemId();
 		if (id == R.id.tryconnectwifi) {
-
+			Do.new tryToConnectToThisWiFi().execute(Do.getWifidao()
+					.loadByRowId(pos.position + 1));
 			return true;
 		} else if (id == R.id.copyfullwifi) {
 			ClipData clip = ClipData.newPlainText("label", Do.getWifidao()
@@ -137,8 +136,8 @@ public class MainActivity extends Activity {
 			return true;
 		} else if (id == R.id.action_sync) {
 			sync.setEnabled(false);
-			AsyncTask<Void, Integer, List<Wifi>> asd =Do.new syncParseAndDao();
-			
+			AsyncTask<Void, Integer, List<Wifi>> asd = Do.new syncParseAndDao();
+
 			asd.execute();
 			return true;
 		}
