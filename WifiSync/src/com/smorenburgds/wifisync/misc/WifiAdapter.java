@@ -18,12 +18,10 @@ import com.smorenburgds.wifisync.dao.Wifi;
 public class WifiAdapter extends ArrayAdapter<Wifi> {
 
 	private Activity context;
-	private int layout;
 	private List<Wifi> wifiList;
 
-	public WifiAdapter(Activity context, int layout, List<Wifi> wifiList) {
-		super(context, layout, wifiList);
-		this.layout = layout;
+	public WifiAdapter(Activity context, List<Wifi> wifiList) {
+		super(context,R.layout.list_wifi_item, wifiList);
 		Collections.sort(wifiList, new Comparator<Wifi>() {
 
 			@Override
@@ -40,7 +38,7 @@ public class WifiAdapter extends ArrayAdapter<Wifi> {
 
 		LayoutInflater inflater = context.getLayoutInflater();
 
-		convertView = inflater.inflate(layout, null);
+		convertView = inflater.inflate(R.layout.list_wifi_item, null);
 
 		// Si optamos por eliminar del constructor del Adaptador el
 		// parámetro del layout que utilizamos como molde, podríamos

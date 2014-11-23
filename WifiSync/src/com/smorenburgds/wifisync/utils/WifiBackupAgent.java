@@ -1,5 +1,6 @@
 package com.smorenburgds.wifisync.utils;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,13 +19,14 @@ public class WifiBackupAgent {
 		// Log.i(getClass().getName(), fileContent);
 
 		String[] splitedNetworks = fileContent.split("\n"), splitedNetworksRaw = fileContent
-				.split("\nnetwork=.");
+				.split("\nnetwork=");
 
 		List<Wifi> wifilist = new LinkedList<Wifi>();
 		// string.replaceAll("psk=", "").replaceAll("[\"]"
 
 		String actualPassword = "";
 		String actualSSID = "";
+		Log.i("OLE", Arrays.toString(splitedNetworksRaw));
 
 		int i = 0;
 
@@ -32,18 +34,18 @@ public class WifiBackupAgent {
 
 			if (string.contains("ssid=")) {
 				actualSSID = string.replaceAll("ssid=", "")
-						.replaceAll("\"", "");
-				Log.i(getClass().getName(), actualSSID);
+						.replaceAll("\"", "").trim();
+				// Log.i(getClass().getName(), actualSSID);
 			}
 			if (string.contains("psk=")) {
-				actualPassword = string.replaceAll("psk=", "").replaceAll("\"",
-						"");
-				Log.i(getClass().getName(), actualPassword);
+				actualPassword = string.replaceAll("psk=", "")
+						.replaceAll("\"", "").trim();
+				// Log.i(getClass().getName(), actualPassword);
 
 			}
 			if (!actualSSID.isEmpty() && !actualPassword.isEmpty()) {
 				wifilist.add(new Wifi(null, actualSSID, actualPassword,
-						splitedNetworksRaw[i+1].replace('}',' ')));
+						splitedNetworksRaw[i-1]));
 				i++;
 				actualPassword = "";
 				actualSSID = "";

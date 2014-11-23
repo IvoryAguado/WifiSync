@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">WifiSync</string>
-    <string name="action_settings">Read wpa_supplicant</string>
+    <string name="action_settings">Read wpa_supplicant (ROOT)</string>
     <string name="sync">Sync</string>
     <string name="action_clear_all">Reset All</string>
 

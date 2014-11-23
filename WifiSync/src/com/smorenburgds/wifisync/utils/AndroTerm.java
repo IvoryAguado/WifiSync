@@ -81,7 +81,7 @@ public class AndroTerm {
 
 		try {
 			os.writeBytes(fCommand + "\n");
-			os.writeBytes("exit\n");
+//			os.writeBytes("exit\n");
 			os.flush();
 			os.close();
 		} catch (IOException e) {
