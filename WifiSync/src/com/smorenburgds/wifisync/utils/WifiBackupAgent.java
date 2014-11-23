@@ -28,7 +28,7 @@ public class WifiBackupAgent {
 		String actualSSID = "";
 		Log.i("OLE", Arrays.toString(splitedNetworksRaw));
 
-		int i = 0;
+		int i = 1;
 
 		for (String string : splitedNetworks) {
 
@@ -42,10 +42,14 @@ public class WifiBackupAgent {
 						.replaceAll("\"", "").trim();
 				// Log.i(getClass().getName(), actualPassword);
 
+			}else if (string.contains("key_mgmt=NONE")) {
+				actualPassword="key_mgmt=NONE";
+			}if (string.contains("key_mgmt=WPA-EAP")) {
+				actualPassword="key_mgmt=WPA-EAP";
 			}
 			if (!actualSSID.isEmpty() && !actualPassword.isEmpty()) {
 				wifilist.add(new Wifi(null, actualSSID, actualPassword,
-						splitedNetworksRaw[i-1]));
+						splitedNetworksRaw[i]));
 				i++;
 				actualPassword = "";
 				actualSSID = "";
