@@ -1,7 +1,5 @@
 package com.smorenburgds.wifisync.misc;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import android.app.Activity;
@@ -12,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.smorenburgds.wifisync.MainActivity;
 import com.smorenburgds.wifisync.R;
 import com.smorenburgds.wifisync.dao.Wifi;
 
@@ -21,14 +20,14 @@ public class WifiAdapter extends ArrayAdapter<Wifi> {
 	private List<Wifi> wifiList;
 
 	public WifiAdapter(Activity context, List<Wifi> wifiList) {
-		super(context,R.layout.list_wifi_item, wifiList);
-//		Collections.sort(wifiList, new Comparator<Wifi>() {
-//
-//			@Override
-//			public int compare(Wifi lhs, Wifi rhs) {
-//				return lhs.getName().compareTo(rhs.getName());
-//			}
-//		});
+		super(context, R.layout.list_wifi_item, wifiList);
+		// Collections.sort(wifiList, new Comparator<Wifi>() {
+		//
+		// @Override
+		// public int compare(Wifi lhs, Wifi rhs) {
+		// return lhs.getName().compareTo(rhs.getName());
+		// }
+		// });
 		this.wifiList = wifiList;
 		this.context = context;
 	}
@@ -50,15 +49,20 @@ public class WifiAdapter extends ArrayAdapter<Wifi> {
 				.findViewById(R.id.textItemWifi);
 		TextView wifiPass = (TextView) convertView
 				.findViewById(R.id.passwordSsid);
-		
+
 		// Rescato los elementos del molde para modificarlos con el nombre y el
 		// icono de la fruta actual
 
 		wifiEssid.setText(wifiActual.getName());
-		wifiPass.setText(wifiActual.getPassword());
+
+		if (MainActivity.DEMO_MODE) {
+			wifiPass.setText("");
+		} else {
+			wifiPass.setText(wifiActual.getPassword());
+		}
 		wifiPass.setTextColor(Color.parseColor("#628DBA"));
 		convertView.setBackgroundColor(Color.WHITE);
-		
+
 		if (position % 2 == 0) {
 			convertView.setBackgroundColor(Color.parseColor("#87C1FF"));
 			wifiPass.setTextColor(Color.WHITE);

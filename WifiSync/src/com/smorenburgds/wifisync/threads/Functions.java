@@ -32,7 +32,7 @@ import com.smorenburgds.wifisync.utils.WifiBackupAgent;
 public class Functions {
 
 	private static final String FILE_WIFI_SUPPLICANT = "/data/misc/wifi/wpa_supplicant.conf";
-	private static final String FILE_WIFI_SUPPLICANT_TEMPLATE = "/system/etc/wifi/wpa_supplicant.conf";
+//	private static final String FILE_WIFI_SUPPLICANT_TEMPLATE = "/system/etc/wifi/wpa_supplicant.conf";
 	private static final String DIR_WIFISYNC_TEMP = "/storage/ext_sd/";
 	private static final String FILE_WIFI_SUPPLICANT_TEMP = "/storage/ext_sd/wpa_supplicant.conf";
 
@@ -47,7 +47,6 @@ public class Functions {
 
 	public Functions() {
 		andT = new AndroTerm(true);
-		// Parse DB initialitation
 		Parse.initialize(WifiSyncApplication.getAppContext(),
 				"UUsEZlDHou6NijQcIG5BE5RZ7RzPNnOuY9QfHNIo",
 				"WXN5pug3ilcxCWJ7Bfj3Kq2lJSvnOyOuk73Iyd9E");
@@ -117,8 +116,6 @@ public class Functions {
 			try {
 				ParseObject.saveAll(toStoreInB);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 

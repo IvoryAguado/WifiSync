@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +26,8 @@ public class MainActivity extends Activity {
 
 	public static ListView wifiListView;
 	public static MainActivity activitymain;
+
+	public static final boolean DEMO_MODE = false;
 
 	private ClipboardManager clipboard;
 	public static MenuItem sync;
@@ -74,23 +75,34 @@ public class MainActivity extends Activity {
 					.loadByRowId(pos.position + 1));
 			return true;
 		} else if (id == R.id.copyfullwifi) {
-			ClipData clip = ClipData.newPlainText("label", Do.getWifidao()
-					.loadByRowId(pos.position + 1).getRawData());
-			clipboard.setPrimaryClip(clip);
-			Toast.makeText(this,
-					Do.getWifidao().loadByRowId(pos.position + 1).getRawData(),
-					Toast.LENGTH_LONG).show();
+
+			if (DEMO_MODE) {
+				Toast.makeText(this, "Funcion deshabilitada", Toast.LENGTH_LONG)
+						.show();
+			} else {
+				ClipData clip = ClipData.newPlainText("label", Do.getWifidao()
+						.loadByRowId(pos.position + 1).getRawData());
+				clipboard.setPrimaryClip(clip);
+				Toast.makeText(
+						this,
+						Do.getWifidao().loadByRowId(pos.position + 1)
+								.getRawData(), Toast.LENGTH_LONG).show();
+			}
 			return true;
 		} else if (id == R.id.copyPass) {
 
-			ClipData clip = ClipData.newPlainText("label", Do.getWifidao()
-					.loadByRowId(pos.position + 1).getPassword());
-			clipboard.setPrimaryClip(clip);
-
-			Toast.makeText(
-					this,
-					Do.getWifidao().loadByRowId(pos.position + 1).getPassword(),
-					Toast.LENGTH_LONG).show();
+			if (DEMO_MODE) {
+				Toast.makeText(this, "Funcion deshabilitada", Toast.LENGTH_LONG)
+						.show();
+			} else {
+				ClipData clip = ClipData.newPlainText("label", Do.getWifidao()
+						.loadByRowId(pos.position + 1).getPassword());
+				clipboard.setPrimaryClip(clip);
+				Toast.makeText(
+						this,
+						Do.getWifidao().loadByRowId(pos.position + 1)
+								.getRawData(), Toast.LENGTH_LONG).show();
+			}
 			return true;
 		}
 		return super.onContextItemSelected(item);

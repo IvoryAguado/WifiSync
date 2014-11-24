@@ -4,12 +4,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.content.Context;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
 import android.util.Log;
 
-import com.smorenburgds.wifisync.WifiSyncApplication;
 import com.smorenburgds.wifisync.dao.Wifi;
 
 public class WifiBackupAgent {
@@ -17,7 +13,6 @@ public class WifiBackupAgent {
 	private final static String WIFI_BLOCK_END = "}";
 
 	public WifiBackupAgent() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public List<Wifi> parseWpa_supplicantFile(String fileContent) {
@@ -51,6 +46,11 @@ public class WifiBackupAgent {
 						actualSSID = line.replace("ssid=", "").replaceAll("\"",
 								"");
 
+					} else if (line.startsWith("key_mgmt=NONE")
+							&& !block.contains("psk=")) {
+
+						actualPassword = "Open Wifi Network =)";
+
 					} else if (line.startsWith("psk=")) {
 
 						actualPassword = line.replace("psk=", "").replaceAll(
@@ -67,14 +67,15 @@ public class WifiBackupAgent {
 
 					} else if (line.startsWith("wep_key3=")) {
 
-					} else if (!block.contains("psk=")) {
+					}else if (line.startsWith("identity=")) {
 
-						actualPassword = "Wifi Open";
+						actualPassword = "User: "+line.replace("identity=", "")
+								.replaceAll("\"", "");
 
-					} else if (line.startsWith("password=")) {
+					}  else if (line.startsWith("password=")) {
 
-						actualPassword = line.replace("psk=", "").replaceAll(
-								"\"", "");
+						actualPassword += "\nPassword: "+line.replace("password=", "")
+								.replaceAll("\"", "");
 
 					} else if (actualSSID != "") {
 						wifilist.add(new Wifi(null, actualSSID, actualPassword,
@@ -107,7 +108,6 @@ public class WifiBackupAgent {
 			// if (wifiToAdd.getPassword().isEmpty()) {
 			// wifilist.add(wifiToAdd);
 			// }
-
 		}
 
 		return wifilist;

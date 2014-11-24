@@ -14,6 +14,5 @@ public class WifiSyncApplication extends Application {
  
     public static Context getAppContext() {
         return WifiSyncApplication.context;
-    } 
-	
+    } 	
 }
