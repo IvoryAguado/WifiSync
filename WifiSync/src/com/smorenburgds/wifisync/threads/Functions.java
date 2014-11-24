@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -32,7 +33,8 @@ import com.smorenburgds.wifisync.utils.WifiBackupAgent;
 public class Functions {
 
 	private static final String FILE_WIFI_SUPPLICANT = "/data/misc/wifi/wpa_supplicant.conf";
-//	private static final String FILE_WIFI_SUPPLICANT_TEMPLATE = "/system/etc/wifi/wpa_supplicant.conf";
+	// private static final String FILE_WIFI_SUPPLICANT_TEMPLATE =
+	// "/system/etc/wifi/wpa_supplicant.conf";
 	private static final String DIR_WIFISYNC_TEMP = "/storage/ext_sd/";
 	private static final String FILE_WIFI_SUPPLICANT_TEMP = "/storage/ext_sd/wpa_supplicant.conf";
 
@@ -121,10 +123,12 @@ public class Functions {
 
 		@Override
 		protected List<Wifi> doInBackground(Void... params) {
-			
+
 			List<Wifi> parseDb = getAllFromParse();
 			ArrayList<Wifi> daoDb = new ArrayList<Wifi>(getWifidao().loadAll());
 			wifidao.deleteAll();
+			while (!wifidao.loadAll().isEmpty());
+			
 			HashMap<String, Wifi> newSyncedList = new HashMap<String, Wifi>();
 
 			for (Wifi wifiDao : daoDb) {
@@ -133,7 +137,7 @@ public class Functions {
 			for (Wifi wifiParse : parseDb) {
 				newSyncedList.put(wifiParse.getName(), wifiParse);
 			}
-			
+
 			Iterator<Entry<String, Wifi>> newSyncedListIterable = newSyncedList
 					.entrySet().iterator();
 
@@ -142,22 +146,22 @@ public class Functions {
 			}
 
 			// daoDb.removeAll(parseDb);
-//			List<Integer> indexToDelete = new LinkedList<Integer>();
-//			
-//			for (int i = 0; i < daoDb.size(); i++) {
-//				for (int j = 0; j < parseDb.size(); j++) {
-//					if (daoDb.get(i).getRawData()
-//							.equalsIgnoreCase(parseDb.get(j).getRawData())) {
-//						indexToDelete.add(i);
-//						
-//					}
-//				}
-//			}
-//			int sizetoloop = indexToDelete.size();
-//			for (int i = 0; i < sizetoloop+1; i++) {
-//				daoDb.remove(indexToDelete.get(i).intValue());
-//				sizetoloop--;
-//			}
+			// List<Integer> indexToDelete = new LinkedList<Integer>();
+			//
+			// for (int i = 0; i < daoDb.size(); i++) {
+			// for (int j = 0; j < parseDb.size(); j++) {
+			// if (daoDb.get(i).getRawData()
+			// .equalsIgnoreCase(parseDb.get(j).getRawData())) {
+			// indexToDelete.add(i);
+			//
+			// }
+			// }
+			// }
+			// int sizetoloop = indexToDelete.size();
+			// for (int i = 0; i < sizetoloop+1; i++) {
+			// daoDb.remove(indexToDelete.get(i).intValue());
+			// sizetoloop--;
+			// }
 
 			setAllToParse(wifidao.loadAll());
 			return wifidao.loadAll();

@@ -12,7 +12,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="44dp"
-        android:text="passwword"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
@@ -22,7 +21,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="18dp"
-        android:text="SSID"
         android:textSize="16sp" />
 
     <Space
@@ -31,6 +29,14 @@
         android:layout_below="@+id/passwordSsid"
         android:layout_centerHorizontal="true" />
 
-
+    <TextView
+        android:id="@+id/mgmtKey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textItemWifi"
+        android:layout_alignBottom="@+id/textItemWifi"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="14dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

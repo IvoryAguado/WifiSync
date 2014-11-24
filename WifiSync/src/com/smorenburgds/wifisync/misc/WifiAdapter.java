@@ -49,21 +49,32 @@ public class WifiAdapter extends ArrayAdapter<Wifi> {
 				.findViewById(R.id.textItemWifi);
 		TextView wifiPass = (TextView) convertView
 				.findViewById(R.id.passwordSsid);
+		TextView mgmtKey = (TextView) convertView.findViewById(R.id.mgmtKey);
 
 		// Rescato los elementos del molde para modificarlos con el nombre y el
 		// icono de la fruta actual
 
 		wifiEssid.setText(wifiActual.getName());
-
+		
+		
+		if (wifiActual.getRawData().contains("key_mgmt=WPA-PSK")) {
+			mgmtKey.setText("WPA-PSK");
+		}else if(wifiActual.getRawData().contains("key_mgmt=NONE") && !wifiActual.getRawData().contains("psk=")){
+			mgmtKey.setText("OPEN");
+		}if(wifiActual.getRawData().contains("key_mgmt=WPA-EAP")){
+			mgmtKey.setText("WPA-EAP");
+		}
 		if (MainActivity.DEMO_MODE) {
 			wifiPass.setText("");
 		} else {
 			wifiPass.setText(wifiActual.getPassword());
 		}
+		mgmtKey.setTextColor(Color.parseColor("#000000"));
 		wifiPass.setTextColor(Color.parseColor("#628DBA"));
 		convertView.setBackgroundColor(Color.WHITE);
 
 		if (position % 2 == 0) {
+			mgmtKey.setTextColor(Color.parseColor("#ffffff"));
 			convertView.setBackgroundColor(Color.parseColor("#87C1FF"));
 			wifiPass.setTextColor(Color.WHITE);
 		}

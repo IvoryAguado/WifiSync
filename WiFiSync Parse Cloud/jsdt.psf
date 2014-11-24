@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+	<provider id="org.eclipse.team.cvs.core.cvsnature">
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/development/org.eclipse.wst.jsdt.debug.crossfire,org.eclipse.wst.jsdt.debug.crossfire" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/docs/org.eclipse.wst.jsdt.doc,org.eclipse.wst.jsdt.doc" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/features/org.eclipse.wst.jsdt.feature,org.eclipse.wst.jsdt.feature" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/features/org.eclipse.wst.jsdt_tests.feature,org.eclipse.wst.jsdt_tests.feature" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.core,org.eclipse.wst.jsdt.core" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.debug.core,org.eclipse.wst.jsdt.debug.core" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.debug.rhino,org.eclipse.wst.jsdt.debug.rhino" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.debug.rhino.debugger,org.eclipse.wst.jsdt.debug.rhino.debugger" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.debug.ui,org.eclipse.wst.jsdt.debug.ui" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.manipulation,org.eclipse.wst.jsdt.manipulation" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.support.firefox,org.eclipse.wst.jsdt.support.firefox" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.support.ie,org.eclipse.wst.jsdt.support.ie" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/plugins/org.eclipse.wst.jsdt.ui,org.eclipse.wst.jsdt.ui" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/tests/org.eclipse.wst.jsdt.core.tests.compiler,org.eclipse.wst.jsdt.core.tests.compiler" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/tests/org.eclipse.wst.jsdt.core.tests.model,org.eclipse.wst.jsdt.core.tests.model" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/tests/org.eclipse.wst.jsdt.debug.core.tests,org.eclipse.wst.jsdt.debug.core.tests" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/tests/org.eclipse.wst.jsdt.debug.rhino.tests,org.eclipse.wst.jsdt.debug.rhino.tests" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,org.eclipse.jsdt/tests/org.eclipse.wst.jsdt.ui.tests,org.eclipse.wst.jsdt.ui.tests" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/webtools,webtools.maps/releng.jsdt,releng.jsdt" />
+		<project reference="1.0,:extssh:dev.eclipse.org:/cvsroot/tools,org.eclipse.orbit/org.mozilla.javascript,org.mozilla.javascript,v1_7_2" />
+	</provider>
+</psf>

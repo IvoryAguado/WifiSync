@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "WifiSync": {
+            "applicationId": "UUsEZlDHou6NijQcIG5BE5RZ7RzPNnOuY9QfHNIo", 
+            "masterKey": "wlZiUSEIOX9w3Avb9ewJ3XjgSQQRZe2C5Jrjo3gU"
+        }, 
+        "_default": {
+            "link": "WifiSync"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.1"
+    }
+}
