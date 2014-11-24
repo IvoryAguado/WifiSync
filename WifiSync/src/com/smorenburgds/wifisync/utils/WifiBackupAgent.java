@@ -50,35 +50,29 @@ public class WifiBackupAgent {
 					if (line.startsWith("ssid=")) {
 						actualSSID = line.replace("ssid=", "").replaceAll("\"",
 								"");
-						// Network Keys:
+
 					} else if (line.startsWith("psk=")) {
-						// passKeys.put("psk", line.replace("psk=", ""));
+
 						actualPassword = line.replace("psk=", "").replaceAll(
 								"\"", "");
-						// type = NetInfo.TYPE_WPA;
+
 					} else if (line.startsWith("wep_key0=")) {
-						// passKeys.put("WEP Key 0", line.replace("wep_key0=",
-						// ""));
+
 						actualPassword = line.replace("psk=", "").replaceAll(
 								"\"", "");
-						// type = NetInfo.TYPE_WEP;
+
 					} else if (line.startsWith("wep_key1=")) {
-						// passKeys.put("WEP Key 1", line.replace("wep_key1=",
-						// ""));
+
 					} else if (line.startsWith("wep_key2=")) {
-						// passKeys.put("WEP Key 2", line.replace("wep_key2=",
-						// ""));
+
 					} else if (line.startsWith("wep_key3=")) {
-						// passKeys.put("WEP Key 3", line.replace("wep_key3=",
-						// ""));
+
 					} else if (!block.contains("psk=")) {
-						// passKeys.put("Password", line.replace("password=",
-						// ""));
+
 						actualPassword = "Wifi Open";
 
 					} else if (line.startsWith("password=")) {
-						// passKeys.put("Password", line.replace("password=",
-						// ""));
+
 						actualPassword = line.replace("psk=", "").replaceAll(
 								"\"", "");
 

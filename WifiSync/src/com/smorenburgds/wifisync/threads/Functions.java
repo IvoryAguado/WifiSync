@@ -1,5 +1,6 @@
 package com.smorenburgds.wifisync.threads;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -123,10 +124,10 @@ public class Functions {
 
 		@Override
 		protected List<Wifi> doInBackground(Void... params) {
-
+			
 			List<Wifi> parseDb = getAllFromParse();
-			List<Wifi> daoDb = getWifidao().loadAll();
-
+			ArrayList<Wifi> daoDb = new ArrayList<Wifi>(getWifidao().loadAll());
+			wifidao.deleteAll();
 			HashMap<String, Wifi> newSyncedList = new HashMap<String, Wifi>();
 
 			for (Wifi wifiDao : daoDb) {
@@ -135,7 +136,7 @@ public class Functions {
 			for (Wifi wifiParse : parseDb) {
 				newSyncedList.put(wifiParse.getName(), wifiParse);
 			}
-			wifidao.deleteAll();
+			
 			Iterator<Entry<String, Wifi>> newSyncedListIterable = newSyncedList
 					.entrySet().iterator();
 
@@ -143,8 +144,25 @@ public class Functions {
 				wifidao.insert(newSyncedListIterable.next().getValue());
 			}
 
-			daoDb.removeAll(parseDb);
-			setAllToParse(daoDb);
+			// daoDb.removeAll(parseDb);
+//			List<Integer> indexToDelete = new LinkedList<Integer>();
+//			
+//			for (int i = 0; i < daoDb.size(); i++) {
+//				for (int j = 0; j < parseDb.size(); j++) {
+//					if (daoDb.get(i).getRawData()
+//							.equalsIgnoreCase(parseDb.get(j).getRawData())) {
+//						indexToDelete.add(i);
+//						
+//					}
+//				}
+//			}
+//			int sizetoloop = indexToDelete.size();
+//			for (int i = 0; i < sizetoloop+1; i++) {
+//				daoDb.remove(indexToDelete.get(i).intValue());
+//				sizetoloop--;
+//			}
+
+			setAllToParse(wifidao.loadAll());
 			return wifidao.loadAll();
 		}
 
@@ -238,7 +256,7 @@ public class Functions {
 
 			return null;
 		}
-		
+
 	}
 
 	public WifiDao getWifidao() {
