@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -105,7 +104,7 @@ public class Functions {
 			return wifiList;
 		}
 
-		private void setAllToParse(List<Wifi> list) {
+		private List<Wifi> setAllToParse(List<Wifi> list) {
 			List<ParseObject> toStoreInB = new LinkedList<ParseObject>();
 			ParseObject wifiEntry = null;
 			for (Wifi wifi : list) {
@@ -117,33 +116,40 @@ public class Functions {
 			}
 			try {
 				ParseObject.saveAll(toStoreInB);
+				return getAllFromParse();
 			} catch (ParseException e) {
 			}
+			return new LinkedList<Wifi>();
 		}
 
 		@Override
 		protected List<Wifi> doInBackground(Void... params) {
 
-			List<Wifi> parseDb = getAllFromParse();
-			ArrayList<Wifi> daoDb = new ArrayList<Wifi>(getWifidao().loadAll());
-			wifidao.deleteAll();
-			while (!wifidao.loadAll().isEmpty());
+//			List<Wifi> parseDb = getAllFromParse();
+//			ArrayList<Wifi> daoDb = new ArrayList<Wifi>(getWifidao().loadAll());
 			
-			HashMap<String, Wifi> newSyncedList = new HashMap<String, Wifi>();
-
-			for (Wifi wifiDao : daoDb) {
-				newSyncedList.put(wifiDao.getName(), wifiDao);
-			}
-			for (Wifi wifiParse : parseDb) {
-				newSyncedList.put(wifiParse.getName(), wifiParse);
-			}
-
-			Iterator<Entry<String, Wifi>> newSyncedListIterable = newSyncedList
-					.entrySet().iterator();
-
-			while (newSyncedListIterable.hasNext()) {
-				wifidao.insert(newSyncedListIterable.next().getValue());
-			}
+//			while(daoDb.size()!=wifidao.loadAll().size());
+			
+			
+//			while (!wifidao.loadAll().isEmpty()){
+//				wifidao.deleteAll();
+//			};
+//			
+//			HashMap<String, Wifi> newSyncedList = new HashMap<String, Wifi>();
+//
+//			for (Wifi wifiDao : daoDb) {
+//				newSyncedList.put(wifiDao.getName(), wifiDao);
+//			}
+//			for (Wifi wifiParse : parseDb) {
+//				newSyncedList.put(wifiParse.getName(), wifiParse);
+//			}
+//
+//			Iterator<Entry<String, Wifi>> newSyncedListIterable = newS24yncedList
+//					.entrySet().iterator();
+//
+//			while (newSyncedListIterable.hasNext()) {
+//				wifidao.insert(newSyncedListIterable.next().getValue());
+//			}
 
 			// daoDb.removeAll(parseDb);
 			// List<Integer> indexToDelete = new LinkedList<Integer>();
@@ -163,8 +169,8 @@ public class Functions {
 			// sizetoloop--;
 			// }
 
-			setAllToParse(wifidao.loadAll());
-			return wifidao.loadAll();
+			
+			return setAllToParse(wifidao.loadAll());
 		}
 
 		@Override

@@ -4,9 +4,12 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 import com.smorenburgds.wifisync.dao.Wifi;
 import com.smorenburgds.wifisync.misc.WifiAdapter;
 import com.smorenburgds.wifisync.threads.Functions;
+import com.smorenburgds.wifisync.versioning.AutoUpdateApk;
 
 public class MainActivity extends Activity {
 
@@ -33,19 +37,86 @@ public class MainActivity extends Activity {
 	public static MenuItem sync;
 
 	private Functions Do;
-
-	WifiAdapter adapter = null;
+	private AutoUpdateApk wifiUpdateChecker;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setActivitymain(this);
+		wifiUpdateChecker = new AutoUpdateApk();
+		update();
 		Do = new Functions();
 		wifiListView = (ListView) findViewById(R.id.listWifiView);
 		clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 		registerForContextMenu(wifiListView);
 		populateWifiListView();
+	}
+
+	private void update() {
+
+		new AsyncTask<Void, Void, Boolean>() {
+
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				wifiUpdateChecker.getData(MainActivity.this);
+				if (wifiUpdateChecker.isNewVersionAvailable()) {
+					return true;
+				}
+				return false;
+			}
+
+			protected void onPostExecute(Boolean result) {
+
+				if (result) {
+					Toast.makeText(MainActivity.this,
+							"Nueva Version Disponible! =)", Toast.LENGTH_LONG)
+							.show();
+					Builder downloadAsk = new AlertDialog.Builder(
+							MainActivity.this)
+							.setTitle(
+									"WifiSync - Nueva Version "
+											+ wifiUpdateChecker
+													.getLatestVersionCode()
+											+ "."
+											+ wifiUpdateChecker
+													.getLatestVersionName())
+							.setMessage("¿Descargar nueva version?")
+							.setCancelable(false)
+							.setPositiveButton("Más tarde si eso...",
+									new DialogInterface.OnClickListener() {
+
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											finish();
+										}
+
+									})
+							.setNegativeButton("Actualizar!",
+									new DialogInterface.OnClickListener() {
+
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											startActivity(new Intent(
+													"android.intent.action.VIEW",
+													Uri.parse(wifiUpdateChecker
+															.getDownloadURL())));
+											finish();
+										}
+
+									}).setIcon(android.R.drawable.ic_popup_sync);
+					downloadAsk.show();
+				} else {
+					Toast.makeText(MainActivity.this, "No Hay Nueva Version",
+							Toast.LENGTH_LONG).show();
+				}
+			};
+		}.execute();
+
 	}
 
 	private void populateWifiListView() {
@@ -101,7 +172,7 @@ public class MainActivity extends Activity {
 				Toast.makeText(
 						this,
 						Do.getWifidao().loadByRowId(pos.position + 1)
-								.getRawData(), Toast.LENGTH_LONG).show();
+								.getPassword(), Toast.LENGTH_LONG).show();
 			}
 			return true;
 		}
@@ -151,6 +222,9 @@ public class MainActivity extends Activity {
 			AsyncTask<Void, Integer, List<Wifi>> asd = Do.new syncParseAndDao();
 
 			asd.execute();
+			return true;
+		} else if (id == R.id.check_updates) {
+			update();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
