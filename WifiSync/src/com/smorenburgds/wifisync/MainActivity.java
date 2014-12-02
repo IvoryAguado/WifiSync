@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
 	private ClipboardManager clipboard;
 	public static MenuItem sync;
 
-	private Functions Do;
+	private static Functions Do;
 	private AutoUpdateApk wifiUpdateChecker;
 
 	@Override
@@ -108,19 +108,20 @@ public class MainActivity extends Activity {
 											finish();
 										}
 
-									}).setIcon(android.R.drawable.ic_popup_sync);
+									})
+							.setIcon(android.R.drawable.ic_popup_sync);
 					downloadAsk.show();
 				} else {
-					Toast.makeText(MainActivity.this, "No Hay Nueva Version",
-							Toast.LENGTH_LONG).show();
+					// Toast.makeText(MainActivity.this, "No Hay Nueva Version",
+					// Toast.LENGTH_LONG).show();
 				}
 			};
 		}.execute();
 
 	}
 
-	private void populateWifiListView() {
-		wifiListView.setAdapter(new WifiAdapter(MainActivity.this, Do
+	public static void populateWifiListView() {
+		wifiListView.setAdapter(new WifiAdapter(MainActivity.getActivitymain(), Do
 				.getWifidao().loadAll()));
 	}
 
@@ -183,7 +184,7 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.options_menu_main, menu);
-		sync = menu.getItem(0);
+		sync = menu.getItem(1);
 		return true;
 	}
 
@@ -194,7 +195,8 @@ public class MainActivity extends Activity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_readwpa) {
-			Do.new readFromPhoneWifis().execute();
+			Do.new readFromPhoneWifi().execute();
+			
 			return true;
 		} else if (id == R.id.action_clear_all) {
 			new AlertDialog.Builder(this)
@@ -218,10 +220,16 @@ public class MainActivity extends Activity {
 
 			return true;
 		} else if (id == R.id.action_sync) {
+
+			sync.setIcon(android.R.drawable.spinner_background);
+			
 			sync.setEnabled(false);
 			AsyncTask<Void, Integer, List<Wifi>> asd = Do.new syncParseAndDao();
 
 			asd.execute();
+			return true;
+		} else if (id == R.id.check_updates) {
+			update();
 			return true;
 		} else if (id == R.id.check_updates) {
 			update();

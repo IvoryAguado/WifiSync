@@ -5,5 +5,6 @@
     <string name="action_settings">Read wpa_supplicant (ROOT)</string>
     <string name="sync">Sync</string>
     <string name="action_clear_all">Reset All</string>
+    <string name="add_wifi">Add WiFi</string>
 
 </resources>

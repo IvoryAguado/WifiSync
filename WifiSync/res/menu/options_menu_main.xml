@@ -3,7 +3,13 @@
     tools:context="com.smorenburgds.wifisync.MainActivity" >
 
     <item
+        android:id="@+id/action_add"
+        android:icon="@android:drawable/ic_menu_add"
+        android:showAsAction="ifRoom"
+        android:title="@+string/add_wifi"/>
+    <item
         android:id="@+id/action_sync"
+        android:icon="@android:drawable/stat_notify_sync_noanim"
         android:showAsAction="ifRoom"
         android:title="@+string/sync"/>
     <item

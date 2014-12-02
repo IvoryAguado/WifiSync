@@ -78,7 +78,7 @@ public class WifiBackupAgent {
 								.replaceAll("\"", "");
 
 					} else if (actualSSID != "") {
-						wifilist.add(new Wifi(null, actualSSID, actualPassword,
+						wifilist.add(new Wifi(actualSSID, actualPassword,
 								block.replaceAll("network=", "")));
 					}
 

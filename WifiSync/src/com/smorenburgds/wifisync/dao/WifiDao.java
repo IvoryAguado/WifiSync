@@ -3,7 +3,6 @@ package com.smorenburgds.wifisync.dao;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
-
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
@@ -59,11 +58,6 @@ public class WifiDao extends AbstractDao<Wifi, Long> {
     protected void bindValues(SQLiteStatement stmt, Wifi entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
- 
         String name = entity.getName();
         if (name != null) {
             stmt.bindString(2, name);
@@ -89,8 +83,7 @@ public class WifiDao extends AbstractDao<Wifi, Long> {
     /** @inheritdoc */
     @Override
     public Wifi readEntity(Cursor cursor, int offset) {
-        Wifi entity = new Wifi( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+        Wifi entity = new Wifi( // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // password
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // rawData
@@ -101,33 +94,29 @@ public class WifiDao extends AbstractDao<Wifi, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, Wifi entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setPassword(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setRawData(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
      }
     
-    /** @inheritdoc */
-    @Override
-    protected Long updateKeyAfterInsert(Wifi entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
-    }
-    
-    /** @inheritdoc */
-    @Override
-    public Long getKey(Wifi entity) {
-        if(entity != null) {
-            return entity.getId();
-        } else {
-            return null;
-        }
-    }
+
 
     /** @inheritdoc */
     @Override    
     protected boolean isEntityUpdateable() {
         return true;
     }
+
+	@Override
+	protected Long getKey(Wifi arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Long updateKeyAfterInsert(Wifi arg0, long arg1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
 }

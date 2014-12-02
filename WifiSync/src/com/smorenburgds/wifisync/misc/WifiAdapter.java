@@ -55,19 +55,26 @@ public class WifiAdapter extends ArrayAdapter<Wifi> {
 		// icono de la fruta actual
 
 		wifiEssid.setText(wifiActual.getName());
-		
-		
+
 		if (wifiActual.getRawData().contains("key_mgmt=WPA-PSK")) {
 			mgmtKey.setText("WPA-PSK");
-		}else if(wifiActual.getRawData().contains("key_mgmt=NONE") && !wifiActual.getRawData().contains("psk=")){
+		} else if (wifiActual.getRawData().contains("key_mgmt=NONE")
+				&& !wifiActual.getRawData().contains("psk=")) {
 			mgmtKey.setText("OPEN");
-		}if(wifiActual.getRawData().contains("key_mgmt=WPA-EAP")){
+		}
+		if (wifiActual.getRawData().contains("key_mgmt=WPA-EAP")) {
 			mgmtKey.setText("WPA-EAP");
 		}
 		if (MainActivity.DEMO_MODE) {
 			wifiPass.setText("");
 		} else {
-			wifiPass.setText(wifiActual.getPassword());
+			if (wifiActual.getName().equalsIgnoreCase("SmorenburgS")
+					|| wifiActual.getName().equalsIgnoreCase("SmorenburgS5")
+					|| wifiActual.getName().equalsIgnoreCase("Orange-922a")) {
+				wifiPass.setText("null");
+			} else {
+				wifiPass.setText(wifiActual.getPassword());
+			}
 		}
 		mgmtKey.setTextColor(Color.parseColor("#000000"));
 		wifiPass.setTextColor(Color.parseColor("#628DBA"));
